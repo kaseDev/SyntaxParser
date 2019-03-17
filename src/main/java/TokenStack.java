@@ -34,4 +34,28 @@ public class TokenStack {
         }
         return tokens;
     }
+
+    /**
+     * Returns one of the following:
+     * the index of the first successful ProductionRule if there is a
+     * successful ProductionRule,
+     * -1 if there is not a successful ProductionRules but there is at least
+     * 1 pending ProductionRule,
+     * or -2 if there are no successful or pending ProductionRules, resulting
+     * in all ProductionRules failing. -2 should result in the throwing of an
+     * exception.
+     */
+    public int checkProductionRules(ProductionRule[] productionRules) {
+        boolean pending = false;
+        for (int i = 0; i < productionRules.length; i++) {
+            for (int j = 1; j <= Math.min(productionRules[i].getPattern().length, array.size()); i++) {
+                int testResult = productionRules[i].testAgainstPattern(peek(j));
+                if (testResult == 1)
+                    return i;
+                else if (!pending && testResult == 0)
+                    pending = true;
+            }
+        }
+        return (pending) ? -1 : -2;
+    }
 }

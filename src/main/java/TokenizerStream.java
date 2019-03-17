@@ -32,4 +32,8 @@ public class TokenizerStream {
         return null; // implement later
     }
 
+    public boolean hasNext() {
+        return false;
+    }
+
 }

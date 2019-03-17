@@ -7,4 +7,12 @@ public class Token {
         this.tokenType = tokenType;
         this.value = value;
     }
+
+    public TokenType getTokenType() {
+        return tokenType;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }
