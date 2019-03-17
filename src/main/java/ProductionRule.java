@@ -1,20 +1,21 @@
+import java.util.Arrays;
 import java.util.List;
 
 public class ProductionRule {
 
-    private Token[] pattern;
-    private Token result;
+    private TokenType[] pattern;
+    private TokenType result;
 
-    public ProductionRule(Token[] pattern, Token result) {
+    public ProductionRule(TokenType[] pattern, TokenType result) {
         this.pattern = pattern;
         this.result = result;
     }
 
-    public Token[] getPattern() {
+    public TokenType[] getPattern() {
         return pattern;
     }
 
-    public Token getResult() {
+    public TokenType getResult() {
         return result;
     }
 
@@ -26,10 +27,18 @@ public class ProductionRule {
      * @param tokens
      * @return
      */
-    public int testAgainstPattern(Token[] tokens) {
-        for (int i = 0; i < tokens.length; i++)
-            if (!pattern[i].equals(tokens[i]))
-                return -1;
-        return (tokens.length == pattern.length) ? 1 : 0;
+    public int testAgainstPattern(TokenType[] tokens) {
+        System.out.println(Arrays.toString(tokens));
+        if (tokens.length == 0)
+            throw new IllegalStateException("Stack checked is empty");
+        if (Arrays.equals(tokens, pattern))
+            return 1;
+        for (int i = 0; i < tokens.length; i++) {
+            for (int j = pattern.length - 1; j >= - 1 - i; j--) {
+                if (Arrays.equals(Arrays.copyOfRange(tokens, i, tokens.length), Arrays.copyOfRange(pattern, 0, tokens.length - i)))
+                    return 0;
+            }
+        }
+        return -1;
     }
 }

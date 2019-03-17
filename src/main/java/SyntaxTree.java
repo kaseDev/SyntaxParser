@@ -8,7 +8,7 @@ public class SyntaxTree implements SyntaxTreeNode {
         this.children = children;
     }
 
-    public TokenType getType() {
+    public TokenType getTokenType() {
         return type;
     }
 

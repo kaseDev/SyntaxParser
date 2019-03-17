@@ -1,4 +1,6 @@
 import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -12,8 +14,22 @@ public class TokenizerStream {
 
     private Scanner scan;
 
-    public TokenizerStream() {
+    private List<Token> dummyTestData = new LinkedList<>();
+    private int place = 0;
 
+    public TokenizerStream() {
+        dummyTestData.add(new Token(TokenType.LPAREN, "0: ("));
+        dummyTestData.add(new Token(TokenType.VAR, "1: a"));
+        dummyTestData.add(new Token(TokenType.BINOP, "2: &&"));
+        dummyTestData.add(new Token(TokenType.VAR, "3: b"));
+        dummyTestData.add(new Token(TokenType.RPAREN, "4: )"));
+        dummyTestData.add(new Token(TokenType.BINOP, "5: ||"));
+        dummyTestData.add(new Token(TokenType.LPAREN, "6: ("));
+        dummyTestData.add(new Token(TokenType.VAR, "7: c"));
+//        dummyTestData.add(new Token(TokenType.BINOP, "8: &&"));
+//        dummyTestData.add(new Token(TokenType.UNIOP, "9: !"));
+//        dummyTestData.add(new Token(TokenType.VAR, "10: d"));
+//        dummyTestData.add(new Token(TokenType.RPAREN, "11: )"));
     }
 
     public void setInput(Scanner scan) {
@@ -29,11 +45,11 @@ public class TokenizerStream {
     }
 
     public Token next() {
-        return null; // implement later
+        return dummyTestData.get(place++);
     }
 
     public boolean hasNext() {
-        return false;
+        return place < dummyTestData.size();
     }
 
 }

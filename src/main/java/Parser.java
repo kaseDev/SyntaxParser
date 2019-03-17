@@ -6,14 +6,14 @@ public class Parser {
     private ProductionRule[] startRules;
     private ProductionRule[] productionRules;
     private TokenizerStream tokenStream;
-    private TokenStack tokenStack;
+    private CompleteSyntaxTree completeSyntaxTree;
 
     public Parser(ProductionRule[] startRules, ProductionRule[] productionRules, String inputText) {
         this.startRules = startRules;
         this.productionRules = productionRules;
         this.tokenStream = new TokenizerStream();
         this.tokenStream.setInput(inputText);
-        this.tokenStack = new TokenStack();
+        this.completeSyntaxTree = new CompleteSyntaxTree(startRules, productionRules);
     }
 
     public Parser(ProductionRule[] startRules, ProductionRule[] productionRules, InputStream inputStream) {
@@ -21,7 +21,7 @@ public class Parser {
         this.productionRules = productionRules;
         this.tokenStream = new TokenizerStream();
         this.tokenStream.setInput(inputStream);
-        this.tokenStack = new TokenStack();
+        this.completeSyntaxTree = new CompleteSyntaxTree(startRules, productionRules);
     }
 
     public Parser(ProductionRule[] startRules, ProductionRule[] productionRules, Scanner inputScanner) {
@@ -29,24 +29,17 @@ public class Parser {
         this.productionRules = productionRules;
         this.tokenStream = new TokenizerStream();
         this.tokenStream.setInput(inputScanner);
-        this.tokenStack = new TokenStack();
+        this.completeSyntaxTree = new CompleteSyntaxTree(startRules, productionRules);
     }
 
-    public SyntaxTree parse() {
-        SyntaxTree tree;
+    public CompleteSyntaxTree parse() {
         while (tokenStream.hasNext()) {
-            tokenStack.push(tokenStream.next());
-            int productionMatch = tokenStack.checkProductionRules(productionRules);
-            if (productionMatch >= 0)
-                ;
-            else if (productionMatch == -1)
-                ;
-            else
-                throw new IllegalStateException("There is a syntax error");
+            Token token = tokenStream.next();
+            int productionMatch = completeSyntaxTree.push(token);
+            if (productionMatch == -1)
+                throw new IllegalStateException(token.getValue());
         }
-        if (tokenStack.checkProductionRules(startRules) >= 0)
-            return new SyntaxTree(null, null);
-        else
-            throw new IllegalStateException("There is a syntax error");
+        System.out.println(completeSyntaxTree.checkStartRules());
+        return completeSyntaxTree;
     }
 }
